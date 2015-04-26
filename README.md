@@ -20,11 +20,11 @@ Valence is a protocol for communicating between this node.js process and another
 
 Why have a separate controller process at all? Why not just write the controller logic in javascript and run it in the electron main process?
 
-First of all, the obvious reason is that not everybody wishes to write substantial controller logic in javascript. Different languages have different strengths and libraries that may not be available in javascript/node.js. For example, when communicating with SQL databases it's hard to beat perl's [DBI](https://metacpan.org/pod/DBI) module (see [AnyEvent::DBI](https://metacpan.org/pod/AnyEvent::DBI) and [AnyEvent::Task](https://metacpan.org/pod/AnyEvent::Task) for how to use DBI in an async program).
+First of all, the obvious reason is that not everybody wishes to write substantial controller logic in javascript. Different languages have different strengths and libraries that may not be available in javascript/node.js. For example, when communicating with SQL databases it's hard to beat perl's [DBI](https://metacpan.org/pod/DBI) module (see [AnyEvent::DBI](https://metacpan.org/pod/AnyEvent::DBI) or [AnyEvent::Task](https://metacpan.org/pod/AnyEvent::Task) for how to use DBI in an async program).
 
 Secondly, sometimes we already have significant existing programs written in another language that we would like to add a GUI front-end to. Rather than re-write such apps in javascript, `valence.js` provides a "glue" option for other environments to use electron.
 
-Finally, even if your app is written in javascript, in order to use electron directly, your app needs to support the exact version of C<io.js> that electron is currently compiled with. This can especially be an issue with native modules that depend on old C<node.js> ABIs. With `valence.js` you can use any node.js/io.js environment that is applicable to your application -- well, once we have a javascript driver to valence of course :).
+Finally, even if your app is written in javascript, in order to use electron directly, your app needs to support the exact version of `io.js` that electron is currently compiled with. This can especially be an issue with native modules that depend on older `node.js` ABIs. With `valence.js` you can use any node.js/io.js environment that is applicable to your application -- well, once we have a javascript driver that is :).
 
 
 ## Drivers
@@ -39,7 +39,11 @@ It can be installed with the following cpan minus command (use `--sudo` if you w
 
 After it is installed, see the [Valence](https://metacpan.org/pod/Valence) documentation for how to use it. To work on the code itself, please fork it on [github](https://github.com/hoytech/Valence-p5).
 
+
+
 ## Protocol
+
+TODO: Document this
 
 
 
