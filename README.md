@@ -1,6 +1,6 @@
 # valence.js
 
-[![Valence Logo](https://raw.githubusercontent.com/hoytech/valence/master/logo.svg)](https://github.com/hoytech/valence)
+[![Valence Logo](https://hoytech.github.io/valence/logo.svg)](https://github.com/hoytech/valence)
 
 ## Description
 
