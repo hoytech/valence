@@ -1,5 +1,3 @@
-# valence.js
-
 [![Valence Logo](https://hoytech.github.io/valence/logo.svg)](https://github.com/hoytech/valence)
 
 ## Description
