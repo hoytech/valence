@@ -42,7 +42,147 @@ After it is installed, see the [Valence](https://metacpan.org/pod/Valence) docum
 
 ## Protocol
 
-TODO: Document this
+`valence.js` is an electron app and you can run it as you would any other:
+
+    /path/to/electron /path/to/valence/
+
+After this, the app will block until it receives messages on standard input, and will subsequently emit messages over its standard output. All communication with `valence.js` is done over these stdio pipes.
+
+All messages (both input and output) are minified JSON, followed by a new-line. This means there is exactly one message per line.
+
+Every method has a `cmd` parameter which indicates the "command" to be invoked by the message. The other parameters depend on which command was sent.
+
+### Commands
+
+#### call
+
+APP -> VALENCE
+
+Indicates that valence should call a method on a particular object.
+
+Parameters:
+
+- `obj`: The object id (see `save` below) corresponding to the object that the method should be called on. Optional. If omitted, assumed to be `node.js`'s `module` object.
+
+- `method`: The name of the method to be invoked. Required.
+
+- `save`: The object id to assign to whatever is returned from the method call. Typically this is a counter that is maintained by the app which is incremented for every method call. Optional. If omitted, the return result is discarded.
+
+- `args`: An array of arguments that should be passed to the method. Required (but can be empty).
+
+- `args_cb`: An array of arrays. Each array represents a callback insertion that should be applied to `args` above. The first element in each sub-array is the offset in args where a callback should be inserted, and the second element is the callback id (see the `cb` command). Optional.
+
+#### destroy
+
+APP -> VALENCE
+
+Indicates that the app is finished with an object and valence can discard its reference to it.
+
+Parameters:
+
+- `obj`: The object id of the object to be destroyed. This should have been passed in via a previous `save` parameter. Required.
+
+#### attr
+
+APP -> VALENCE
+
+Used to lookup an attribute from an object and save it in a new object.
+
+Parameters:
+
+- `obj`: The object id of which to lookup an attribute from. Required.
+
+- `attr`: The name of the attribute. Required.
+
+- `save`: The object id to assign to the result. Optional (but pointless without).
+
+#### get
+
+APP -> VALENCE
+
+Retrieves a value stored in an object id.
+
+Parameters:
+
+- `obj`: The object id of the object to retrieve. Required.
+
+- `cb`: The callback id (see the `cb` command) to invoke with the result. Required.
+
+#### cb
+
+VALENCE -> APP
+
+Sent by `valence.js` when it wishes to invoke a callback in your application.
+
+Parameters:
+
+- `cb`: The callback id to be invoked. This was passed in from a `call` or `get` command. Required.
+
+- `args`: An array of arguments to be passed to the callback. Required (but may be empty).
+
+
+### Examples
+
+Here is the detailed description of a few selected messages.
+
+Note that the JSON in these examples has bee "prettified" and in the actual valence protocol they must be minified and one-per-line.
+
+When experimenting, if you are using the perl module you can set the `VALENCE_DEBUG` environment variable to sniff the traffic between a perl app and `valence.js` (see the [Valence](https://metacpan.org/pod/Valence) docs).
+
+#### Example 1
+
+This example is of an app calling a method which contains a callback. It is roughly equivalent to executing this code:
+
+    get_object(3).on('closed', function() {
+        notify_callback(4);
+    });
+
+Here is what the message might look like:
+
+    {
+       "args" : [
+          "closed",
+          null
+       ],
+       "args_cb" : [
+          [
+             1,
+             4
+          ]
+       ],
+       "cmd" : "call",
+       "method" : "on",
+       "obj" : "3"
+    }
+
+The `obj` above is `3` which presumably was the object resulting from the creation of a [browser-window](https://github.com/atom/electron/blob/master/docs/api/browser-window.md) object. We are attaching a callback to listen for `closed` events. The callback id is `4`, and its location in the args array is `1`. Note that the callback has been stubbed out with a `null` value and will be replaced by an actual javascript function by `valence.js`, and how there is no `save` parameter because we aren't interested in the returned result of the `on` method.
+
+#### Example 2
+
+This is what `valence.js` might send when the `closed` event was triggered:
+
+    {
+       "args" : [
+                  {}
+                ],
+       "cb" : 4,
+       "cmd" : "cb"
+    }
+
+The callback id is `4` (see the previous example). There is an empty hash in the `args` list. This corresponds to the javascript event, but has been converted into an empty hash because the `node.js` `JSON.stringify()` method could not serialize this value.
+
+
+## TODO
+
+- Currently the `args_cb` values can only reference the first level of the arguments and cannot replace a callback inside a nested structure like an object or array. Eventually the protocol should support location specifiers such as `[1][3]['field']`
+
+- I need to spec out behaviour for what happens when exceptions are thrown.
+
+- The protocol should have a way to eval raw javascript.
+
+- The special `new` method can currently only support 1 parameter because of a limitation in javascript.
+
+- There is no way for `valence.js` to know when a callback it has installed has been garbage collected. If there was then we could have `valence.js` send a "callback destroy" command to the app.
 
 
 
