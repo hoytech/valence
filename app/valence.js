@@ -1,3 +1,9 @@
+//
+// Copyright 2015 Doug Hoyte
+//
+// This project is licensed under the 2-clause BSD license.
+//
+
 "use strict";
 
 var readline = require('readline');
