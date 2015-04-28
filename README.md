@@ -4,9 +4,9 @@
 
 `valence.js` is an interface for controlling github's [electron](https://github.com/atom/electron) GUI toolkit from another process. It is inspired by the [Thrust](https://github.com/breach/thrust) project.
 
-Essentially, electron is a node.js process connected to a chromium process. The idea is that you write node.js javascript code to control a chromium process in order to build "native" applications.
+Essentially, electron is a node.js process connected to a chromium process. The idea is that you write node.js javascript code to control a chromium process in order to build applications that look and feel like native applications.
 
-Valence is a protocol for communicating between this node.js process and another controller process, and `valence.js` is the node.js component of the implementation that runs in the electron main process:
+Valence is a protocol for communicating between this node.js process and another controller process, and `valence.js` is the node.js component of the implementation. `valence.js` runs in the electron main process as depicted in this diagram:
 
     |------------|    stdio |--------------| IPC |----------------|
     |  Your app  |--------->| electron     |---->| electron       |
@@ -19,7 +19,7 @@ Valence is a protocol for communicating between this node.js process and another
 
 Why have a separate controller process at all? Why not just write the controller logic in javascript and run it in the electron main process?
 
-First of all, the obvious reason is that not everybody wishes to write substantial controller logic in javascript. Different languages have different strengths and libraries that may not be available in javascript/node.js. For example, when communicating with SQL databases it's hard to beat perl's [DBI](https://metacpan.org/pod/DBI) module (see [AnyEvent::DBI](https://metacpan.org/pod/AnyEvent::DBI) or [AnyEvent::Task](https://metacpan.org/pod/AnyEvent::Task) for how to use DBI in an async program).
+First of all, the obvious reason is that not everybody wants to write substantial controller logic in javascript. Different languages have different strengths and libraries that may not be available in javascript/node.js. For example, when communicating with SQL databases it's hard to beat perl's [DBI](https://metacpan.org/pod/DBI) module (see [AnyEvent::DBI](https://metacpan.org/pod/AnyEvent::DBI) or [AnyEvent::Task](https://metacpan.org/pod/AnyEvent::Task) for how to use DBI in an async program).
 
 Secondly, sometimes we already have significant existing programs written in another language that we would like to add a GUI front-end to. Rather than re-write such apps in javascript, `valence.js` provides a "glue" option for other environments to use electron.
 
@@ -32,7 +32,7 @@ Finally, even if your app is written in javascript, in order to use electron dir
 
 The reference implementation of the app-side of the valence protocol is written in perl 5.
 
-It can be installed with the following cpan minus command (use `--sudo` if you with to install globally):
+It can be installed with the following cpan minus command (use `--sudo` if you with to install it for all users on your machine):
 
     $ cpanm Valence --sudo
 
@@ -44,9 +44,9 @@ After it is installed, see the [Valence](https://metacpan.org/pod/Valence) docum
 
 `valence.js` is an electron app and you can run it as you would any other:
 
-    /path/to/electron /path/to/valence/
+    /path/to/electron /path/to/valence/app/
 
-After this, the app will block until it receives messages on standard input, and will subsequently emit messages over its standard output. All communication with `valence.js` is done over these stdio pipes.
+After this, the app will wait until it receives messages on standard input, and will subsequently emit messages over its standard output. All of your app's communication with `valence.js` is done over electron's stdio pipes.
 
 All messages (both input and output) are minified JSON, followed by a new-line. This means there is exactly one message per line.
 
@@ -176,13 +176,14 @@ The callback id is `4` (see the previous example). There is an empty hash in the
 
 - Currently the `args_cb` values can only reference the first level of the arguments and cannot replace a callback inside a nested structure like an object or array. Eventually the protocol should support location specifiers such as `[1][3]['field']`
 
-- I need to spec out behaviour for what happens when exceptions are thrown.
+- It needs to spec out behaviour for what happens when exceptions are thrown.
 
-- The protocol should have a way to eval raw javascript.
+- The protocol should expose a way to eval raw javascript in the main process (you can already do it in the render process with `WebContents.executeJavaScript()`).
 
 - The special `new` method can currently only support 1 parameter because of a limitation in javascript.
 
-- There is no way for `valence.js` to know when a callback it has installed has been garbage collected. If there was then we could have `valence.js` send a "callback destroy" command to the app.
+- `valence.js` currently doesn't know when a callback it has installed has been garbage collected. If it did then it could send a "callback destroy" command to the app. This may be possible with the npm [weak](https://www.npmjs.com/package/weak) module.
+
 
 
 
