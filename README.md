@@ -185,6 +185,14 @@ The callback id is `4` (see the previous example). There is an empty hash in the
 - `valence.js` currently doesn't know when a callback it has installed has been garbage collected. If it did then it could send a "callback destroy" command to the app. This may be possible with the npm [weak](https://www.npmjs.com/package/weak) module.
 
 
+## See Also
+
+The [Valence perl module](https://metacpan.org/pod/Valence)
+
+Some examples that use Valence: [DB-Browser](https://github.com/hoytech/db-browser), [HackRF-RCCar](https://github.com/hoytech/Radio-HackRF-RCCar)
+
+[Presentation for Perl Mongers](https://www.youtube.com/watch?v=u3S2vhN0S1M&t=2m23s)
+
 
 
 ## Author
