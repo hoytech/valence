@@ -25,7 +25,7 @@ First of all, the obvious reason is that not everybody wants to write substantia
 
 Secondly, sometimes we already have significant existing programs written in another language that we would like to add a GUI front-end to. Rather than re-write such apps in javascript, `valence.js` provides a "glue" option for other environments to use electron.
 
-Finally, even if your app is written in javascript, in order to use electron directly, your app needs to support the exact version of `io.js` that electron is currently compiled with. This can especially be an issue with native modules that depend on older `node.js` APIs. With `valence.js` you can use any node.js/io.js environment that is applicable to your application -- well, once we have a javascript driver that is :).
+Finally, even if your app is written in javascript, in order to use electron directly, your app needs to support the exact version of `node` that electron is currently compiled with. This can especially be an issue with native modules that depend on older `node` APIs. With `valence.js` you can use any `node` environment that is applicable to your application -- well, once we have a javascript driver that is :).
 
 
 ## Drivers
