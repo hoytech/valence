@@ -14,6 +14,8 @@ Valence is a protocol for communicating between this node.js process and another
     |------------|          |--------------|     |----------------|
      perl/whatever             valence.js            chromium
 
+`valence.js` is compatible with electron versions 0.25.1 through 1.0.1 (and probably later).
+
 
 ## Rationale
 
@@ -201,8 +203,8 @@ Doug Hoyte, doug@hcsw.org
 
 ## COPYRIGHT & LICENSE
 
-Copyright 2015 Doug Hoyte.
+Copyright 2015-2016 Doug Hoyte.
 
 This project is licensed under the 2-clause BSD license.
 
-Electron itself is Copyright (c) 2014 GitHub Inc. and is licensed under the MIT license.
+Electron itself is Copyright (c) 2014-2016 GitHub Inc. and is licensed under the MIT license.
