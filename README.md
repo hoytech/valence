@@ -102,7 +102,7 @@ Parameters:
 
 APP -> VALENCE
 
-Retrieves a value stored in an object id.
+Retrieves a value stored in an object id by having it passed to a callback.
 
 Parameters:
 
@@ -127,7 +127,7 @@ Parameters:
 
 Here is the detailed description of a few selected messages.
 
-Note that the JSON in these examples has bee "prettified" and in the actual valence protocol they must be minified and one-per-line.
+Note that the JSON in these examples has been "prettified" and in the actual valence protocol they **must** be minified and one-per-line.
 
 When experimenting, if you are using the perl module you can set the `VALENCE_DEBUG` environment variable to sniff the traffic between a perl app and `valence.js` (see the [Valence](https://metacpan.org/pod/Valence) docs).
 
@@ -157,7 +157,7 @@ Here is what the message might look like:
        "obj" : "3"
     }
 
-The `obj` above is `3` which presumably was the object resulting from the creation of a [browser-window](https://github.com/atom/electron/blob/master/docs/api/browser-window.md) object. We are attaching a callback to listen for `closed` events. The callback id is `4`, and its location in the args array is `1`. Note that the callback has been stubbed out with a `null` value and will be replaced by an actual javascript function by `valence.js`, and how there is no `save` parameter because we aren't interested in the returned result of the `on` method.
+The `obj` above is `3` which presumably was the object resulting from the creation of a [BrowserWindow](https://github.com/atom/electron/blob/master/docs/api/browser-window.md) object. We are attaching a callback to listen for `closed` events. The callback id is `4`, and its location in the args array is `1`. Note that the callback has been stubbed out with a `null` value and will be replaced by an actual javascript function by `valence.js`, and how there is no `save` parameter because we aren't interested in the returned result of the `on` method.
 
 #### Example 2
 
