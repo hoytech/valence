@@ -14,7 +14,7 @@ Valence is a protocol for communicating between this node.js process and another
     |------------|          |--------------|     |----------------|
      perl/whatever             valence.js            chromium
 
-`valence.js` is compatible with electron versions 0.25.1 through 1.0.1 (and probably later).
+`valence.js` is compatible with electron versions 0.25.1 through 1.4.1 (and probably later).
 
 
 ## Rationale
