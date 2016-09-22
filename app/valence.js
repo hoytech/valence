@@ -1,5 +1,5 @@
 //
-// Copyright 2015 Doug Hoyte
+// Copyright 2015-2016 Doug Hoyte
 //
 // This project is licensed under the 2-clause BSD license.
 //
